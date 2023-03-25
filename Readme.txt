@@ -2,6 +2,9 @@ reference original source code
 https://gitlab.com/nanuchi/k8s-in-1-hour
 
 step by step:
+	install mk
+		https://minikube.sigs.k8s.io/docs/start/
+			Download and run the installer for the latest release.
 
 	start mk
 		C:\Program Files\Kubernetes\Minikube
@@ -42,6 +45,28 @@ step by step:
 
 	if error
 		minikube service webapp-service
+
+Rerun after exercise complete, or pulled from git:
+	start mk		
+		minikube start --driver docker
+
+	applying the configuration files
+		kubectl apply -f mongo-config.yaml
+		kubectl apply -f mongo-secret.yaml
+		kubectl apply -f mongo.yaml
+		kubectl apply -f webapp.yaml
+
+	check status
+		kubectl get all
+
+	get ip
+		kubectl get node -o wide
+
+	if error
+		minikube service webapp-service
+
+	open in browser
+		http://127.0.0.1:53409/
 
 other commands:
 	minikube status
