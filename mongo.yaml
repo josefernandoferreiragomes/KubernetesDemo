@@ -1,5 +1,8 @@
+###  Deployment and Service in one file
+###  Deployment section
 apiVersion: apps/v1
 kind: Deployment
+###    Deployment metadata section
 metadata:
   name: mongo-deployment
   labels:
@@ -19,6 +22,7 @@ spec:
         image: mongo:5.0
         ports:
         - containerPort: 27017
+###    Deployment environment variables, referencing (ConfigMap) mongo-config and (Secret) mongo-secret
         env:
         - name: MONGO_INITDB_ROOT_USERNAME
           valueFrom:
@@ -31,14 +35,18 @@ spec:
               name: mongo-secret
               key: mongo-password
 ---
+###  Service section
 apiVersion: v1
 kind: Service
 metadata:
   name: mongo-service
 spec:
+###    Service (Connecting service to pods) needs to reference the right selector, to forward the requests to it
   selector:
     app: mongo
   ports:
     - protocol: TCP
+###      any port we define, but the standard is the same as targetPort
       port: 27017
+###      (targetPort = containerPort)
       targetPort: 27017
