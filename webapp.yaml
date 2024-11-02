@@ -1,5 +1,8 @@
-﻿apiVersion: apps/v1
+﻿### Deployment and Service in one file
+### Deployment section
+apiVersion: apps/v1
 kind: Deployment
+###   Deployment metadata section
 metadata:
   name: webapp-deployment
   labels:
@@ -19,6 +22,7 @@ spec:
         image: nanajanashia/k8s-demo-app:v1.0
         ports:
         - containerPort: 3000
+###    Deployment environment variables, referencing (ConfigMap) mongo-config and (Secret) mongo-secret
         env:
         - name: USER_NAME
           valueFrom:
@@ -36,16 +40,21 @@ spec:
               name: mongo-config
               key: mongo-url
 ---
+### Service section
 apiVersion: v1
 kind: Service
 metadata:
   name: webapp-service
 spec:
+###    NodePort
   type: NodePort
+###    Service (Connecting service to pods) needs to reference the right selector, to forward the requests to it
   selector:
     app: webapp
   ports:
     - protocol: TCP
+###      any port we define, but the standard is the same as targetPort
       port: 3000
+###      (targetPort = containerPort)
       targetPort: 3000
       nodePort: 30100
